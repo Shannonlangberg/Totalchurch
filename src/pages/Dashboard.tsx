@@ -13,6 +13,7 @@ export default function Dashboard() {
   const { session, profile } = useAuth()
   const [assignments, setAssignments] = useState<(Assignment & { stewardship: Stewardship })[] | null>(null)
   const [pending, setPending] = useState<string[]>([])
+  const [field, setField] = useState<{ open: number; away: number } | null>(null)
   const [modal, setModal] = useState<Modal>(null)
   const [note, setNote] = useState('')
   const [busy, setBusy] = useState(false)
@@ -35,6 +36,16 @@ export default function Dashboard() {
     setAssignments((a as (Assignment & { stewardship: Stewardship })[]) ?? [])
     const rows = (r ?? []) as unknown as { type: string; stewardship: { title: string } | null }[]
     setPending(rows.filter((x) => x.type === 'join').map((x) => x.stewardship?.title ?? ''))
+
+    const [{ data: all }, { data: act }, { data: abs }] = await Promise.all([
+      supabase.from('stewardships').select('id, capacity').eq('status', 'active'),
+      supabase.from('assignments').select('stewardship_id').eq('status', 'active'),
+      supabase.from('current_absences').select('profile_id'),
+    ])
+    const counts: Record<string, number> = {}
+    for (const row of act ?? []) counts[row.stewardship_id] = (counts[row.stewardship_id] ?? 0) + 1
+    const open = (all ?? []).reduce((sum, s) => sum + Math.max(0, s.capacity - (counts[s.id] ?? 0)), 0)
+    setField({ open, away: (abs ?? []).length })
   }
 
   useEffect(() => {
@@ -104,6 +115,30 @@ export default function Dashboard() {
             dismiss
           </button>
         </div>
+      )}
+
+      {field && (field.open > 0 || field.away > 0) && (
+        <Link
+          to="/app/browse"
+          className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-ink px-5 py-4 text-white transition-transform hover:scale-[1.005]"
+        >
+          <p className="text-sm">
+            <span className="serif-accent text-base">The field today —</span>{' '}
+            {field.open > 0 && (
+              <>
+                <span style={{ color: 'var(--color-ray-blue)' }}>{field.open} open position{field.open > 1 ? 's' : ''}</span>
+              </>
+            )}
+            {field.open > 0 && field.away > 0 && ' · '}
+            {field.away > 0 && (
+              <span style={{ color: 'var(--color-ray-orange)' }}>
+                {field.away} away this week
+              </span>
+            )}
+            <span className="text-white/60"> — see where the House needs you</span>
+          </p>
+          <span className="text-sm text-white/60">View the field →</span>
+        </Link>
       )}
 
       {pending.length > 0 && (

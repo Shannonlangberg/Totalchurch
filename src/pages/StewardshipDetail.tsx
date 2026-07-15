@@ -6,12 +6,15 @@ import { notify } from '../lib/notify'
 import { MOVEMENTS } from '../lib/types'
 import type { Assignment, Request, Stewardship } from '../lib/types'
 import { MovementChip, SectionTitle, Spinner, TextArea } from '../components/ui'
+import { TeamSlots } from '../components/TeamSlots'
+import type { Slot } from '../components/TeamSlots'
 
 export default function StewardshipDetail() {
   const { id } = useParams()
   const { session, profile } = useAuth()
   const [s, setS] = useState<Stewardship | null>(null)
   const [assignments, setAssignments] = useState<Assignment[]>([])
+  const [team, setTeam] = useState<Slot[]>([])
   const [myRequest, setMyRequest] = useState<Request | null>(null)
   const [message, setMessage] = useState('')
   const [asking, setAsking] = useState(false)
@@ -22,9 +25,11 @@ export default function StewardshipDetail() {
   useEffect(() => {
     async function load() {
       if (!id || !session) return
-      const [{ data: st }, { data: asg }, { data: req }] = await Promise.all([
+      const [{ data: st }, { data: asg }, { data: names }, { data: abs }, { data: req }] = await Promise.all([
         supabase.from('stewardships').select('*').eq('id', id).single(),
         supabase.from('assignments').select('*').eq('stewardship_id', id).eq('status', 'active'),
+        supabase.from('steward_names').select('*'),
+        supabase.from('current_absences').select('stewardship_id, profile_id').eq('stewardship_id', id),
         supabase
           .from('requests')
           .select('*')
@@ -36,6 +41,16 @@ export default function StewardshipDetail() {
       ])
       setS(st as Stewardship)
       setAssignments((asg as Assignment[]) ?? [])
+      const nameById: Record<string, string> = {}
+      for (const n of names ?? []) nameById[n.id] = n.full_name || 'Steward'
+      const awaySet = new Set((abs ?? []).map((x: { profile_id: string }) => x.profile_id))
+      setTeam(
+        ((asg as Assignment[]) ?? []).map((x) => ({
+          profileId: x.profile_id,
+          name: nameById[x.profile_id] ?? 'Steward',
+          away: awaySet.has(x.profile_id),
+        })),
+      )
       setMyRequest(req as Request | null)
       setLoading(false)
     }
@@ -113,6 +128,31 @@ export default function StewardshipDetail() {
             <SectionTitle>Resources</SectionTitle>
             <p className="mt-2 font-medium">{s.resources || '—'}</p>
           </div>
+        </section>
+
+        <section>
+          <SectionTitle>On the field</SectionTitle>
+          <div className="mt-4">
+            <TeamSlots slots={team} capacity={s.capacity} size="lg" />
+          </div>
+          <p className="mt-3 text-sm text-stone">
+            {team.length > 0 ? (
+              <>
+                {team.map((t) => t.name.split(' ')[0]).join(', ')}
+                {open > 0 && (
+                  <>
+                    {' '}
+                    · <span className="text-ink">{open} open spot{open > 1 ? 's' : ''}</span>
+                  </>
+                )}
+                {team.some((t) => t.away) && (
+                  <span className="text-ray-orange"> · someone's away this week</span>
+                )}
+              </>
+            ) : (
+              'Nobody on this yet — pioneer it.'
+            )}
+          </p>
         </section>
 
         {s.responsibilities.length > 0 && (
