@@ -125,6 +125,11 @@ export default function Admin() {
     setBusy(false)
   }
 
+  async function setNeedsCover(s: Stewardship, needsCover: boolean) {
+    await supabase.from('stewardships').update({ needs_cover: needsCover }).eq('id', s.id)
+    load()
+  }
+
   async function setArchived(s: Stewardship, archived: boolean) {
     await supabase
       .from('stewardships')
@@ -254,6 +259,14 @@ export default function Admin() {
                     </span>
                     <button onClick={() => openEditor(s)} className="text-ink underline underline-offset-4 cursor-pointer">
                       Edit
+                    </button>
+                    <button
+                      onClick={() => setNeedsCover(s, !s.needs_cover)}
+                      className={`underline underline-offset-4 cursor-pointer ${
+                        s.needs_cover ? 'text-ray-orange' : 'text-stone'
+                      }`}
+                    >
+                      {s.needs_cover ? 'Unflag cover' : 'Ask for cover'}
                     </button>
                     <button
                       onClick={() => setArchived(s, s.status !== 'archived')}

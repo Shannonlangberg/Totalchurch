@@ -25,6 +25,7 @@ export interface Stewardship {
   resources: string
   capacity: number
   status: 'active' | 'archived'
+  needs_cover: boolean
   created_at: string
 }
 

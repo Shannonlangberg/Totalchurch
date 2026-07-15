@@ -14,6 +14,7 @@ export default function Dashboard() {
   const [assignments, setAssignments] = useState<(Assignment & { stewardship: Stewardship })[] | null>(null)
   const [pending, setPending] = useState<string[]>([])
   const [field, setField] = useState<{ open: number; away: number } | null>(null)
+  const [covering, setCovering] = useState<{ id: string; date_to: string; stewardship: Stewardship }[]>([])
   const [modal, setModal] = useState<Modal>(null)
   const [note, setNote] = useState('')
   const [busy, setBusy] = useState(false)
@@ -37,11 +38,18 @@ export default function Dashboard() {
     const rows = (r ?? []) as unknown as { type: string; stewardship: { title: string } | null }[]
     setPending(rows.filter((x) => x.type === 'join').map((x) => x.stewardship?.title ?? ''))
 
-    const [{ data: all }, { data: act }, { data: abs }] = await Promise.all([
+    const today = new Date().toISOString().slice(0, 10)
+    const [{ data: all }, { data: act }, { data: abs }, { data: cov }] = await Promise.all([
       supabase.from('stewardships').select('id, capacity').eq('status', 'active'),
       supabase.from('assignments').select('stewardship_id').eq('status', 'active'),
       supabase.from('current_absences').select('profile_id'),
+      supabase
+        .from('covers')
+        .select('id, date_to, stewardship:stewardships(*)')
+        .eq('profile_id', session.user.id)
+        .gte('date_to', today),
     ])
+    setCovering((cov as unknown as { id: string; date_to: string; stewardship: Stewardship }[]) ?? [])
     const counts: Record<string, number> = {}
     for (const row of act ?? []) counts[row.stewardship_id] = (counts[row.stewardship_id] ?? 0) + 1
     const open = (all ?? []).reduce((sum, s) => sum + Math.max(0, s.capacity - (counts[s.id] ?? 0)), 0)
@@ -142,6 +150,28 @@ export default function Dashboard() {
         <div className="mt-6 rounded-2xl bg-mist p-4 text-sm text-stone">
           Awaiting confirmation: <span className="font-medium text-ink">{pending.join(', ')}</span> — a
           leader will approve you soon.
+        </div>
+      )}
+
+      {covering.length > 0 && (
+        <div className="mt-6 space-y-3">
+          {covering.map((c) => (
+            <div key={c.id} className="overflow-hidden rounded-3xl border border-line bg-white">
+              <div className="h-1.5 w-full" style={{ background: MOVEMENTS[c.stewardship.movement].color }} />
+              <div className="p-6">
+                <p className="text-xs font-medium uppercase tracking-[0.25em] text-stone">
+                  Covering this week · hands back{' '}
+                  {new Date(c.date_to).toLocaleDateString('en-AU', { day: 'numeric', month: 'long' })}
+                </p>
+                <h2 className="mt-2 text-2xl font-light tracking-tight">{c.stewardship.title}</h2>
+                {c.stewardship.playbook && (
+                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-stone">
+                    {c.stewardship.playbook}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

@@ -6,6 +6,7 @@ export type NotifyKind =
   | 'request_declined'
   | 'stepped_down'
   | 'absence_reported'
+  | 'cover_offered'
 
 /**
  * Fire-and-forget notification. The `notify` edge function looks up

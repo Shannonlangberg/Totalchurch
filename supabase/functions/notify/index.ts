@@ -12,6 +12,7 @@ type Payload = {
     | 'request_declined'
     | 'stepped_down'
     | 'absence_reported'
+    | 'cover_offered'
   payload: Record<string, string | undefined>
 }
 
@@ -43,6 +44,12 @@ function template(kind: Payload['kind'], p: Record<string, string | undefined>) 
         html: `<p><strong>${p.person}</strong> has asked to step down from <strong>${p.stewardship}</strong>.</p>${
           p.note ? `<p>“${p.note}”</p>` : ''
         }<p>The stewardship is now visible as a gap the House can fill.</p>`,
+        toAdmins: true,
+      }
+    case 'cover_offered':
+      return {
+        subject: `${p.person} is covering ${p.stewardship} this week`,
+        html: `<p><strong>${p.person}</strong> has stepped in to cover <strong>${p.stewardship}</strong> for the week. The watch is covered.</p>`,
         toAdmins: true,
       }
     case 'absence_reported':
