@@ -120,24 +120,21 @@ export default function Dashboard() {
       {field && (field.open > 0 || field.away > 0) && (
         <Link
           to="/app/browse"
-          className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-ink px-5 py-4 text-white transition-transform hover:scale-[1.005]"
+          className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-white px-5 py-4 transition-all hover:-translate-y-0.5 hover:shadow-md"
         >
-          <p className="text-sm">
-            <span className="serif-accent text-base">The field today —</span>{' '}
+          <p className="text-sm text-stone">
+            <span className="serif-accent text-base text-ink">The House today —</span>{' '}
             {field.open > 0 && (
-              <>
-                <span style={{ color: 'var(--color-ray-blue)' }}>{field.open} open position{field.open > 1 ? 's' : ''}</span>
-              </>
+              <span className="text-ink">
+                {field.open} stewardship{field.open > 1 ? 's' : ''} waiting for someone faithful
+              </span>
             )}
             {field.open > 0 && field.away > 0 && ' · '}
             {field.away > 0 && (
-              <span style={{ color: 'var(--color-ray-orange)' }}>
-                {field.away} away this week
-              </span>
+              <span className="text-ray-orange">{field.away} needing cover this week</span>
             )}
-            <span className="text-white/60"> — see where the House needs you</span>
           </p>
-          <span className="text-sm text-white/60">View the field →</span>
+          <span className="text-sm text-stone">See the House →</span>
         </Link>
       )}
 

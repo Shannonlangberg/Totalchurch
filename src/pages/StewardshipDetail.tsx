@@ -131,7 +131,7 @@ export default function StewardshipDetail() {
         </section>
 
         <section>
-          <SectionTitle>On the field</SectionTitle>
+          <SectionTitle>Who's stewarding this</SectionTitle>
           <div className="mt-4">
             <TeamSlots slots={team} capacity={s.capacity} size="lg" />
           </div>
@@ -150,7 +150,7 @@ export default function StewardshipDetail() {
                 )}
               </>
             ) : (
-              'Nobody on this yet — pioneer it.'
+              'No steward yet — this could be yours.'
             )}
           </p>
         </section>

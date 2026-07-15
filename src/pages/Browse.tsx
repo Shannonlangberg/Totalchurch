@@ -62,29 +62,34 @@ export default function Browse() {
 
   return (
     <div>
-      <p className="serif-accent text-lg text-stone">One squad. Every position.</p>
-      <h1 className="mt-1 text-4xl font-light tracking-tight md:text-5xl">The Field</h1>
+      <p className="serif-accent text-lg text-stone">Everything belongs to Jesus.</p>
+      <h1 className="mt-1 text-4xl font-light tracking-tight md:text-5xl">The House</h1>
 
-      {/* TEAM SHEET STATS */}
-      <div className="mt-8 grid grid-cols-3 gap-4 rounded-3xl bg-ink p-6 text-white md:p-8">
+      {/* THE HOUSE AT A GLANCE */}
+      <div className="mt-8 grid grid-cols-3 gap-4 rounded-3xl border border-line bg-white p-6 md:p-8">
         <div>
           <p className="text-3xl font-light md:text-5xl">
             {stats.filled}
-            <span className="text-white/40">/{stats.total}</span>
+            <span className="text-stone/50">/{stats.total}</span>
           </p>
-          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-white/50">Positions filled</p>
+          <p className="mt-2 flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-stone">
+            <span className="h-1.5 w-1.5 rounded-full bg-ink" />
+            Being stewarded
+          </p>
         </div>
         <div>
-          <p className="text-3xl font-light md:text-5xl" style={{ color: 'var(--color-ray-blue)' }}>
-            {stats.open}
+          <p className="text-3xl font-light md:text-5xl">{stats.open}</p>
+          <p className="mt-2 flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-stone">
+            <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--color-ray-blue)' }} />
+            Waiting for a steward
           </p>
-          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-white/50">Open — could be you</p>
         </div>
         <div>
-          <p className="text-3xl font-light md:text-5xl" style={{ color: 'var(--color-ray-orange)' }}>
-            {stats.away}
+          <p className="text-3xl font-light md:text-5xl">{stats.away}</p>
+          <p className="mt-2 flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-stone">
+            <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--color-ray-orange)' }} />
+            Needing cover this week
           </p>
-          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-white/50">Away this week</p>
         </div>
       </div>
 
@@ -99,7 +104,7 @@ export default function Browse() {
                 : 'border border-line text-stone hover:border-ink hover:text-ink'
             }`}
           >
-            {m === 'all' ? 'Whole field' : MOVEMENTS[m].label}
+            {m === 'all' ? 'The whole House' : MOVEMENTS[m].label}
           </button>
         ))}
       </div>
@@ -137,7 +142,7 @@ export default function Browse() {
                         </span>
                       ) : (
                         <span className="whitespace-nowrap rounded-full bg-mist px-3 py-1 text-[11px] font-medium uppercase tracking-[0.15em] text-stone">
-                          Full squad
+                          Fully stewarded
                         </span>
                       )}
                     </div>
@@ -150,11 +155,11 @@ export default function Browse() {
                     <p className="mt-3 text-sm text-stone">
                       {sl.length > 0
                         ? sl.map((x) => x.name.split(' ')[0]).join(', ')
-                        : 'Nobody on this yet — pioneer it.'}
+                        : 'No steward yet — this could be yours.'}
                       {awayHere > 0 && (
                         <span className="text-ray-orange">
                           {' '}
-                          · {awayHere} away this week — can you cover?
+                          · {awayHere} away this week — could you cover their watch?
                         </span>
                       )}
                     </p>
