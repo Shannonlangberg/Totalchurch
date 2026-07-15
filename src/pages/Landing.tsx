@@ -31,13 +31,13 @@ export default function Landing() {
           <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="rounded-full px-5 py-2.5 text-sm text-ink transition-colors hover:bg-mist"
+              className="whitespace-nowrap rounded-full px-5 py-2.5 text-sm text-ink transition-colors hover:bg-mist"
             >
               Log in
             </Link>
             <Link
               to="/signup"
-              className="rounded-full bg-ink px-5 py-2.5 text-sm text-white transition-transform hover:scale-[1.03]"
+              className="whitespace-nowrap rounded-full bg-ink px-5 py-2.5 text-sm text-white transition-transform hover:scale-[1.03]"
             >
               Get started
             </Link>
