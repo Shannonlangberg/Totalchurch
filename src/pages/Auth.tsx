@@ -49,7 +49,7 @@ export default function Auth({ mode }: { mode: 'login' | 'signup' }) {
       </header>
       <div className="flex flex-1 items-center justify-center px-5 pb-24">
         <div className="w-full max-w-sm">
-          <img src="/brand/raysPurple.png" alt="" className="mb-8 h-10 w-10" />
+          <img src="/brand/raysPurple.png" alt="" className="mb-8 h-10 w-auto" />
           <h1 className="text-3xl font-light tracking-tight">
             {mode === 'signup' ? 'Join the House.' : 'Welcome back.'}
           </h1>

@@ -75,7 +75,7 @@ export default function Onboarding() {
       </header>
       <div className="flex flex-1 items-center justify-center px-5 pb-20">
         <div className="w-full max-w-xl">
-          <img src={step.ray} alt="" className="h-12 w-12" />
+          <img src={step.ray} alt="" className="h-12 w-auto" />
           <p className="mt-8 text-xs font-medium uppercase tracking-[0.25em] text-stone">
             {step.kicker}
           </p>

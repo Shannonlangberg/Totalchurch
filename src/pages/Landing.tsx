@@ -119,7 +119,7 @@ export default function Landing() {
                 <img
                   src={m.ray}
                   alt=""
-                  className="absolute -right-8 -top-8 h-32 w-32 opacity-15 transition-opacity group-hover:opacity-30"
+                  className="absolute -right-8 -top-8 h-32 w-auto opacity-15 transition-opacity group-hover:opacity-30"
                 />
                 <p className="text-2xl font-light tracking-tight">{m.label}</p>
                 <p className="mt-3 leading-relaxed text-stone">{m.tagline}</p>
