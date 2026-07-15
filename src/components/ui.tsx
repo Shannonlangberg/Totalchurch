@@ -74,7 +74,7 @@ export function SectionTitle({ children }: { children: ReactNode }) {
 export function Spinner() {
   return (
     <div className="flex min-h-[40vh] items-center justify-center">
-      <img src="/brand/raysPurple.png" alt="" className="h-8 w-auto animate-pulse" />
+      <img src="/brand/Futures1.png" alt="" className="h-8 w-auto animate-pulse" />
     </div>
   )
 }

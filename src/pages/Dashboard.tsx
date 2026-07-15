@@ -115,7 +115,7 @@ export default function Dashboard() {
 
       {assignments.length === 0 ? (
         <div className="mt-10 rounded-3xl border border-line bg-white p-10 text-center">
-          <img src="/brand/raysPurple.png" alt="" className="mx-auto h-12 w-auto opacity-60" />
+          <img src="/brand/Futures1.png" alt="" className="mx-auto h-12 w-auto opacity-60" />
           <p className="mt-6 text-2xl font-light">Nothing on your watch yet.</p>
           <p className="mx-auto mt-2 max-w-sm text-stone">
             Every part of the House is someone's to steward. Find the area God is stirring in you.
