@@ -35,7 +35,7 @@ export default function Admin() {
     const [{ data: r }, { data: s }, { data: a }, { data: p }, { data: ab }] = await Promise.all([
       supabase
         .from('requests')
-        .select('*, stewardship:stewardships(*), profile:profiles(*)')
+        .select('*, stewardship:stewardships(*), profile:profiles!requests_profile_id_fkey(*)')
         .eq('status', 'pending')
         .order('created_at'),
       supabase.from('stewardships').select('*').order('movement').order('title'),
