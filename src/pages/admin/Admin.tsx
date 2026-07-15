@@ -290,6 +290,7 @@ export default function Admin() {
                   </p>
                   <p className="text-sm text-stone">
                     {p.email}
+                    {p.phone && ` · ${p.phone}`}
                     {theirs.length > 0 &&
                       ` · stewarding ${theirs
                         .map((a) => stewardships.find((s) => s.id === a.stewardship_id)?.title)

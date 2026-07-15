@@ -19,11 +19,13 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name, email)
+  insert into public.profiles (id, full_name, email, phone, role)
   values (
     new.id,
     coalesce(new.raw_user_meta_data ->> 'full_name', ''),
-    coalesce(new.email, '')
+    coalesce(new.email, ''),
+    nullif(new.raw_user_meta_data ->> 'phone', ''),
+    case when lower(coalesce(new.email, '')) = 'shannon.langberg@futures.church' then 'admin' else 'member' end
   );
   return new;
 end;

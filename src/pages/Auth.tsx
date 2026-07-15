@@ -5,6 +5,7 @@ import { Btn, Field } from '../components/ui'
 
 export default function Auth({ mode }: { mode: 'login' | 'signup' }) {
   const [fullName, setFullName] = useState('')
+  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -21,7 +22,7 @@ export default function Auth({ mode }: { mode: 'login' | 'signup' }) {
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { full_name: fullName } },
+        options: { data: { full_name: fullName, phone } },
       })
       if (error) {
         setError(error.message)
@@ -60,13 +61,25 @@ export default function Auth({ mode }: { mode: 'login' | 'signup' }) {
           </p>
           <form onSubmit={submit} className="mt-8 space-y-4">
             {mode === 'signup' && (
-              <Field
-                label="Full name"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                autoComplete="name"
-              />
+              <>
+                <Field
+                  label="Full name"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                  autoComplete="name"
+                />
+                <Field
+                  label="Mobile"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                  autoComplete="tel"
+                  placeholder="04xx xxx xxx"
+                  hint="So a leader can reach you about your stewardship"
+                />
+              </>
             )}
             <Field
               label="Email"
