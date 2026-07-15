@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "GalGothic";
+  src: url("/fonts/GalGothic-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "GalGothic";
+  src: url("/fonts/GalGothic-Regular.otf") format("opentype");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "GalGothic";
+  src: url("/fonts/GalGothic-Italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Rhymes Display";
+  src: url("/fonts/RhymesDisplay-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Rhymes Display";
+  src: url("/fonts/RhymesDisplay-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "GalGothic", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Rhymes Display", ui-serif, Georgia, serif;
+
+  --color-ink: #0A0A0A;
+  --color-paper: #FAFAF8;
+  --color-mist: #F1F0EC;
+  --color-line: #E4E2DC;
+  --color-stone: #8A8880;
+
+  --color-ray-blue: #62B4FF;
+  --color-ray-orange: #FF8432;
+  --color-ray-pink: #E444B9;
+  --color-ray-purple: #5D1FEC;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-ray-purple);
+  color: white;
+}
+
+.serif-accent {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+}
