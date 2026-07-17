@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { notify } from '../../lib/notify'
+import { sendToHeartbeat, splitName } from '../../lib/heartbeat'
 import { MOVEMENTS } from '../../lib/types'
 import type { Absence, Assignment, Movement, Profile, Request, Stewardship } from '../../lib/types'
 import { Btn, Field, MovementChip, SectionTitle, Spinner, TextArea } from '../../components/ui'
@@ -77,6 +78,14 @@ export default function Admin() {
         email: req.profile?.email,
         type: req.type,
       })
+      // Approved into a role → serving milestone + journey ratchet in Heartbeat
+      if (req.type === 'join') {
+        sendToHeartbeat(
+          'role_confirmed',
+          { ...splitName(req.profile?.full_name, req.profile?.email) },
+          { title: req.stewardship?.title },
+        )
+      }
     }
     await load()
     setBusy(false)

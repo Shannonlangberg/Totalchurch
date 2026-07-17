@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { sendToHeartbeat, splitName } from '../lib/heartbeat'
 import { useAuth } from '../context/AuthContext'
 import { notify } from '../lib/notify'
 import { MOVEMENTS } from '../lib/types'
@@ -80,6 +81,12 @@ export default function StewardshipDetail() {
         person: profile?.full_name ?? session.user.email,
         message,
       })
+      // Serving interest → Heartbeat: Dream Team follow-up on their record
+      sendToHeartbeat(
+        'role_interest',
+        { ...splitName(profile?.full_name, session.user.email) },
+        { area: MOVEMENTS[s.movement]?.label ?? s.movement, title: s.title },
+      )
     }
     setBusy(false)
   }

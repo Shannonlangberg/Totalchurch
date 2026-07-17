@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { sendToHeartbeat, splitName } from '../lib/heartbeat'
 import { Btn, Field } from '../components/ui'
 
 export default function Auth({ mode }: { mode: 'login' | 'signup' }) {
@@ -29,6 +30,8 @@ export default function Auth({ mode }: { mode: 'login' | 'signup' }) {
         setBusy(false)
         return
       }
+      // Land the new steward on their Heartbeat person record (fail-soft)
+      sendToHeartbeat('signup', { ...splitName(fullName, email), phone: phone || null })
       navigate('/onboarding')
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
